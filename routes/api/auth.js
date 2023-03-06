@@ -6,6 +6,7 @@ import { check, validationResult } from 'express-validator';
 
 import User from '../../models/User.js';
 import auth from '../../middleware/auth.js';
+import { composeError } from '../../helpers.js';
 
 const router = express.Router();
 
@@ -19,7 +20,7 @@ router.get('/', auth, async (req, res) => {
     res.json(user);
   } catch (e) {
     console.error(e.message);
-    res.status(500).send('Server error');
+    res.status(500).send(composeError('Server error'));
   }
 });
 
@@ -35,7 +36,7 @@ router.post(
 
     if (!errors.isEmpty()) {
       // Bad request
-      return res.status(400).json({ errors: errors.array() });
+      return res.status(400).json(composeError(errors.array()));
     }
 
     const { email, password } = req.body;
@@ -45,18 +46,14 @@ router.post(
 
       if (!user) {
         // return if not last res.send
-        return res
-          .status(400)
-          .json({ errors: [{ msg: 'Invalid credentials' }] });
+        return res.status(400).json(composeError('Invalid credentials'));
       }
 
       // Compare plain text pass from req and bcrypted pass from db
       const isMatch = await bcrypt.compare(password, user.password);
 
       if (!isMatch) {
-        return res
-          .status(400)
-          .json({ errors: [{ msg: 'Invalid credentials' }] });
+        return res.status(400).json(composeError('Invalid credentials'));
       }
 
       const payload = {
@@ -76,7 +73,7 @@ router.post(
       );
     } catch (e) {
       console.error(e.message);
-      return res.status(500).send('Server error');
+      return res.status(500).send(composeError('Server error'));
     }
   }
 );
