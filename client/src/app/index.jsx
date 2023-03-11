@@ -4,8 +4,8 @@ import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import { Toolbar } from '@mui/material';
-import { Outlet } from 'react-router-dom';
 import CssBaseline from '@mui/material/CssBaseline';
+import { Outlet, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Navbar } from 'components';
@@ -16,16 +16,23 @@ import * as Styles from './styles';
 import { useNotifier } from './use-notifier';
 
 const App = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { isAuthenticated, error } = useSelector(selectAuth);
+  const { isAuthenticated, error, user, isLoading } = useSelector(selectAuth);
   useErrorHandler(error);
   useNotifier();
 
   useEffect(() => {
-    if (isAuthenticated) {
+    if (isAuthenticated && !user && !isLoading) {
       dispatch(getUser());
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, user, isLoading]);
+
+  useEffect(() => {
+    if (isAuthenticated && !isLoading) {
+      navigate('dashboard');
+    }
+  }, [isAuthenticated, isLoading]);
 
   return (
     <>

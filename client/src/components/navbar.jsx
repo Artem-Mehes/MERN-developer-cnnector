@@ -1,4 +1,3 @@
-import { Logout } from '@mui/icons-material';
 import { Link, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -43,24 +42,26 @@ const Navbar = () => {
               {isAuthenticated ? (
                 <Tab
                   label="Logout"
-                  icon={<Logout />}
+                  iconPosition="start"
                   onClick={() => dispatch(logout())}
                 />
               ) : (
-                <>
+                [
                   <Tab
                     to="/sign-up"
+                    key="/sign-up"
                     label="Sign up"
                     component={Link}
                     value="/sign-up"
-                  />
+                  />,
                   <Tab
                     to="/sign-in"
-                    value="/sign-in"
+                    key="/sign-in"
                     label="Sign in"
+                    value="/sign-in"
                     component={Link}
-                  />
-                </>
+                  />,
+                ]
               )}
             </Tabs>
           )}

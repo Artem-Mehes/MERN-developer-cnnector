@@ -4,9 +4,10 @@ import ReactDOM from 'react-dom/client';
 import { SnackbarProvider } from 'notistack';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
-import App from './app';
-import { store } from './store';
-import { Landing, SignUp, SignIn } from './components';
+import App from 'app';
+import { store } from 'store';
+import { Protected } from 'components';
+import { Landing, SignUp, SignIn, Dashboard } from 'pages';
 
 const router = createBrowserRouter([
   {
@@ -28,6 +29,14 @@ const router = createBrowserRouter([
       {
         path: 'sign-in',
         element: <SignIn />,
+      },
+      {
+        path: 'dashboard',
+        element: (
+          <Protected>
+            <Dashboard />
+          </Protected>
+        ),
       },
     ],
   },

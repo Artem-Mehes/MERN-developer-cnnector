@@ -3,22 +3,35 @@ import { useDispatch } from 'react-redux';
 
 import { enqueueSnackbar } from 'store/snackbar';
 
-export const useErrorHandler = (errors) => {
+export const useErrorHandler = (error) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (errors) {
-      errors.forEach((error) => {
+    if (error) {
+      if (Array.isArray(error)) {
+        error.forEach((error) => {
+          dispatch(
+            enqueueSnackbar({
+              message: error.msg,
+              options: {
+                variant: 'error',
+                autoHideDuration: 3000,
+              },
+            })
+          );
+        });
+      } else {
         dispatch(
           enqueueSnackbar({
-            message: error.msg,
+            message: error.message,
             options: {
               variant: 'error',
               autoHideDuration: 3000,
             },
           })
         );
-      });
+      }
     }
-  }, [errors, dispatch]);
+
+  }, [error, dispatch]);
 };

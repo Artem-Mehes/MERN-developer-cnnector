@@ -25,12 +25,12 @@ const initialState = {
   error: null,
   isLoading: false,
   token: token || null,
-  isAuthenticated: false,
+  isAuthenticated: Boolean(token),
 };
 
 const rejectReducer = (state, { payload }) => {
   localStorage.removeItem('token');
-  state.isAuthenticated = initialState.isAuthenticated;
+  state.isAuthenticated = false;
   state.isLoading = initialState.isLoading;
   state.error = payload;
   state.token = null;

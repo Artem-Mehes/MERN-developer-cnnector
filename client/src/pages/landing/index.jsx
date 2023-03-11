@@ -1,9 +1,14 @@
+import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { Box, Button, Container, Typography } from '@mui/material';
 
 import * as Styles from './styles';
-import { Link } from 'react-router-dom';
+
+import { selectAuth } from 'store/auth';
 
 const Landing = () => {
+  const { isAuthenticated } = useSelector(selectAuth);
+
   return (
     <Styles.Container>
       <Container
@@ -29,25 +34,27 @@ const Landing = () => {
           </Typography>
         </Box>
 
-        <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center' }}>
-          <Button
-            size="large"
-            to="sign-up"
-            component={Link}
-            variant="contained"
-          >
-            Sign Up
-          </Button>
-          <Button
-            to="sign-in"
-            size="large"
-            color="inherit"
-            component={Link}
-            variant="contained"
-          >
-            Sign in
-          </Button>
-        </Box>
+        {!isAuthenticated && (
+          <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center' }}>
+            <Button
+              size="large"
+              to="sign-up"
+              component={Link}
+              variant="contained"
+            >
+              Sign Up
+            </Button>
+            <Button
+              to="sign-in"
+              size="large"
+              color="inherit"
+              component={Link}
+              variant="contained"
+            >
+              Sign in
+            </Button>
+          </Box>
+        )}
       </Container>
     </Styles.Container>
   );
